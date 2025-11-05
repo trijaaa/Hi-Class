@@ -1,11 +1,11 @@
 const kelompok = "Kelompok 2 Hi-Class"
-let nama = {
-    nama1: "Azzahra",
-    nama2: "Fadhil",
-    nama3: "Awan",
-    nama4: "Raihan",
-    nama5: "Triza"
+let anggota = {
+    Azzahra: "2515061009",
+    Awan: "2515061073",
+    Raihan: "2515061039",
+    Fadhil: "2515061041",
+    Triza: "2515061099"
 }
 
 console.log(kelompok)
-console.table(nama)
+console.table(anggota)
