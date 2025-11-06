@@ -1,14 +1,631 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>U-HADIR || Unila Human Attendance Data & Intelegent Record </title>
-    <link rel="stylesheet" href="style.css">
+    <title>Presensi Kehadiran Mahasiswa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateX(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #e0e7ff 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            color: #4f46e5;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #312e81;
+            font-weight: 700;
+        }
+
+        .header-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.2s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .card:nth-child(4) {
+            animation-delay: 0.3s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: backwards;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #334155;
+            font-size: 0.875rem;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .radio-group {
+            margin-top: 0.75rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .radio-option.hadir {
+            border-color: #e2e8f0;
+        }
+
+        .radio-option.hadir:hover {
+            border-color: #86efac;
+            background-color: #f0fdf4;
+        }
+
+        .radio-option.izin {
+            border-color: #e2e8f0;
+        }
+
+        .radio-option.izin:hover {
+            border-color: #fde047;
+            background-color: #fefce8;
+        }
+
+        .radio-option.sakit {
+            border-color: #e2e8f0;
+        }
+
+        .radio-option.sakit:hover {
+            border-color: #fca5a5;
+            background-color: #fef2f2;
+        }
+
+        .radio-option.active.hadir {
+            border-color: #86efac;
+            background-color: #f0fdf4;
+        }
+
+        .radio-option.active.izin {
+            border-color: #fde047;
+            background-color: #fefce8;
+        }
+
+        .radio-option.active.sakit {
+            border-color: #fca5a5;
+            background-color: #fef2f2;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 0.75rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .status-indicator.hadir {
+            background-color: #22c55e;
+        }
+
+        .status-indicator.izin {
+            background-color: #eab308;
+        }
+
+        .status-indicator.sakit {
+            background-color: #ef4444;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            animation: fadeIn 0.5s ease-out 0.5s;
+            animation-fill-mode: backwards;
+        }
+
+        .submit-btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        h2 {
+            color: #312e81;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .attendance-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .attendance-item {
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .attendance-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .attendance-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .attendance-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+
+        .attendance-info.name {
+            color: #1e293b;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .info-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 2px solid;
+            margin-top: 0.5rem;
+            align-self: flex-start;
+        }
+
+        .status-badge.hadir {
+            background-color: #dcfce7;
+            color: #15803d;
+            border-color: #bbf7d0;
+        }
+
+        .status-badge.izin {
+            background-color: #fef9c3;
+            color: #a16207;
+            border-color: #fde047;
+        }
+
+        .status-badge.sakit {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #94a3b8;
+            padding: 3rem 1rem;
+        }
+
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid #22c55e;
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        @media (min-width: 640px) {
+            .attendance-content {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .attendance-details {
+                flex: 1;
+            }
+
+            .status-badge {
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .toast {
+                top: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Ini tugas PDD terbaru</h1>
-    <h1>Ini bapak budi</h1>
-    <script src="script.js"></script>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                </svg>
+                <h1>Presensi Kehadiran</h1>
+            </div>
+            <p class="header-subtitle">Sistem Pencatatan Kehadiran Mahasiswa</p>
+        </div>
+
+        <div class="card">
+            <form id="attendanceForm">
+                <div class="form-group">
+                    <label for="name">Nama Lengkap</label>
+                    <input type="text" id="name" placeholder="Masukkan nama lengkap" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="npm">NPM (Nomor Pokok Mahasiswa)</label>
+                    <input type="text" id="npm" placeholder="Masukkan NPM" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Tanggal</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Keterangan Kehadiran</label>
+                    <div class="radio-group">
+                        <div class="radio-option hadir active" data-status="hadir">
+                            <input type="radio" id="hadir" name="status" value="hadir" checked>
+                            <label for="hadir" class="radio-label">
+                                <span class="status-indicator hadir"></span>
+                                <span>Hadir</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option izin" data-status="izin">
+                            <input type="radio" id="izin" name="status" value="izin">
+                            <label for="izin" class="radio-label">
+                                <span class="status-indicator izin"></span>
+                                <span>Izin</span>
+                            </label>
+                        </div>
+
+                        <div class="radio-option sakit" data-status="sakit">
+                            <input type="radio" id="sakit" name="status" value="sakit">
+                            <label for="sakit" class="radio-label">
+                                <span class="status-indicator sakit"></span>
+                                <span>Sakit</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Submit Presensi
+                </button>
+            </form>
+        </div>
+
+
+        <div class="card">
+            <h2>Riwayat Presensi</h2>
+            <div id="attendanceList" class="attendance-list">
+                <div class="empty-state">Belum ada data presensi</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        document.getElementById('date').valueAsDate = new Date();
+
+        let attendances = JSON.parse(localStorage.getItem('attendances')) || [];
+
+        const radioOptions = document.querySelectorAll('.radio-option');
+        radioOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                radioOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+
+        function formatDate(dateString) {
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function renderAttendances() {
+            const listContainer = document.getElementById('attendanceList');
+            
+            if (attendances.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">Belum ada data presensi</div>';
+                return;
+            }
+
+            listContainer.innerHTML = attendances.map(attendance => `
+                <div class="attendance-item">
+                    <div class="attendance-content">
+                        <div class="attendance-details">
+                            <div class="attendance-info name">
+                                <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                <span>${attendance.name}</span>
+                            </div>
+                            <div class="attendance-info">
+                                <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                                </svg>
+                                <span>NPM: ${attendance.npm}</span>
+                            </div>
+                            <div class="attendance-info">
+                                <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <span>${formatDate(attendance.date)}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="status-badge ${attendance.status}">
+                                ${capitalizeFirst(attendance.status)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const npm = document.getElementById('npm').value.trim();
+            const date = document.getElementById('date').value;
+            const status = document.querySelector('input[name="status"]:checked').value;
+
+            if (!name) {
+                showToast('Nama tidak boleh kosong', 'error');
+                return;
+            }
+
+            if (!npm) {
+                showToast('NPM tidak boleh kosong', 'error');
+                return;
+            }
+
+            const newAttendance = {
+                id: Date.now().toString(),
+                name: name,
+                npm: npm,
+                date: date,
+                status: status,
+                timestamp: Date.now()
+            };
+
+            attendances.unshift(newAttendance);
+
+            localStorage.setItem('attendances', JSON.stringify(attendances));
+
+            document.getElementById('name').value = '';
+            document.getElementById('npm').value = '';
+            document.getElementById('date').valueAsDate = new Date();
+            document.getElementById('hadir').checked = true;
+            radioOptions.forEach(opt => opt.classList.remove('active'));
+            radioOptions[0].classList.add('active');
+
+
+            showToast('Presensi berhasil dicatat!');
+
+
+            renderAttendances();
+        });
+
+
+        renderAttendances();
+    </script>
 </body>
-</html> 
+</html>
