@@ -1,1 +1,9 @@
-/*Sama Gw Juga abis html jadi */
+.auth-container, .dashboard {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 320px;
+  animation: fadeIn 0.6s ease-in-out;
+}
