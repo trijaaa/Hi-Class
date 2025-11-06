@@ -18,3 +18,27 @@ body {
   width: 320px;
   animation: fadeIn 0.6s ease-in-out;
 }
+
+button {
+  background: linear-gradient(to right, #002F6C, #0056B3);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin: 9px 0;
+  padding: 9px;
+  border-radius: 9px;
+  border: 1px solid #ccc;
+}
+
+button:hover {
+  background: linear-gradient(to right, #001f47, #003c7c);
+}
