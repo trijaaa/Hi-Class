@@ -42,3 +42,48 @@ input {
 button:hover {
   background: linear-gradient(to right, #001f47, #003c7c);
 }
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #4e54c8;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard {
+  margin-top: 100px;
+  width: 80%;
+  max-width: 800px;
+}
+
+.calendar-container {
+  margin-top: 30px;
+}
+
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.calendar-day {
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.present {
+  background: #5cb85c !important;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
