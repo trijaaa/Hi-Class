@@ -1,3 +1,14 @@
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #2600ff, #ffffff);
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
 .auth-container, .dashboard {
   background: white;
   padding: 30px;
